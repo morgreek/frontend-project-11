@@ -1,0 +1,17 @@
+{
+  "name": "@hexlet/code",
+  "version": "0.0.1",
+  "description": "RSS agregator, third Hexlet project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"package.json - установи тестер\" && exit 1"
+  },
+  "author": "morgreek",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.52.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-jest": "^27.4.3"
+  }
+}
