@@ -1,5 +1,5 @@
 name: main workflow
-on: [push]
+on: [workflow_dispatch]
 env:
   CI: true
 
