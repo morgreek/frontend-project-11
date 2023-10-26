@@ -1,17 +1,14 @@
+develop:
+	npx webpack serve
+
 install:
 	npm ci
 
-publish:
-	npm publish --dry-run
-
-lint:
-	npx eslint .
-
-lint-fix:
-	npx eslint . --fix
+build:
+	NODE_ENV=production npx webpack
 
 test:
 	npm test
 
-test-coverage:
-	npm test -- --coverage --coverageProvider=v8
+lint:
+	npx eslint .

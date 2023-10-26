@@ -21,11 +21,13 @@
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.5.3",
     "postcss-loader": "^7.3.3",
-    "sass": "^1.69.4",
+    "sass": "^1.69.5",
     "sass-loader": "^13.3.2",
     "style-loader": "^3.3.3",
+    "vercel": "^32.5.0",
     "webpack": "^5.89.0",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
