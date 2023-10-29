@@ -37,11 +37,16 @@ function app() {
 
         state.subscribeProcess.status = 'sending';
         state.subscribeProcess.error = null;
+        state.mainForm.error = null;
 
         validator(state.mainForm.fields.url, state.rssList)
             .then((validatedUrl) => {
-                state.mainForm.valid = true;
                 state.subscribeProcess.status = 'sending';
+                return Promise.resolve();
+            })
+            .then(() => {
+                state.mainForm.valid = true;
+                state.subscribeProcess.status = 'added';
                 return Promise.resolve();
             })
             .then(() => {

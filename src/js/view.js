@@ -45,14 +45,17 @@ const render = (elements, initialState) => (path, value, previousValue) => {
         case 'mainForm.valid':
             if (value) {
                 elements.inputField.classList.remove('is-invalid');
-                changeFeedback(elements.feedback, '', 'success');
             } else {
                 elements.inputField.classList.add('is-invalid');
             }
             break;
         
         case 'mainForm.error':
-            changeFeedback(elements.feedback, initialState.mainForm.error, 'danger');
+            if (initialState.mainForm.error) {
+                changeFeedback(elements.feedback, initialState.mainForm.error, 'danger');
+            } else {
+                changeFeedback(elements.feedback, '', 'success');
+            }
             break;
         
         default:
