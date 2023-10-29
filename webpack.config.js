@@ -50,11 +50,5 @@ const config = {
 };
 
 module.exports = () => {
-    if (!isProduction) {
-        config.watch = true;
-        config.watchOptions = {
-            aggregateTimeout: 900,
-        }
-    }
     return config;
 };

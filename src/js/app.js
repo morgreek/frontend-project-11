@@ -35,13 +35,14 @@ function app() {
     elements.mainForm.addEventListener('submit', (e) => {
         e.preventDefault();
 
-        state.subscribeProcess.status = 'sending';
-        state.subscribeProcess.error = null;
         state.mainForm.error = null;
+        state.subscribeProcess.error = null;
+        state.subscribeProcess.status = 'sending';
 
         validator(state.mainForm.fields.url, state.rssList)
             .then((validatedUrl) => {
                 state.subscribeProcess.status = 'sending';
+                state.rssList.push(validatedUrl)
                 return Promise.resolve();
             })
             .then(() => {
@@ -58,8 +59,6 @@ function app() {
                 state.mainForm.error = error;
             });
     })
-
-
 }
 
 export default app;
