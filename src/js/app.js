@@ -39,7 +39,6 @@ function app() {
     }
 
     const autoUpdaterRss = () => {
-        console.log((new Date()))
         const promises = state.rssList.map((rss) => {
             return getData(rss)
                 .then((responseData) => {
