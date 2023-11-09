@@ -1,7 +1,10 @@
+import 'bootstrap';
 import stateView from './view.js';
 import validator from './validator.js';
 import axios from 'axios';
 import rssParsers from './rssParsers.js';
+import _ from 'lodash';
+import local from './localizations.js';
 
 function app() {
     const initialState = {
@@ -19,6 +22,8 @@ function app() {
         rssList: [],
         feeds: [],
         posts: [],
+        readedPostsId: new Set(),
+        clickOnPost: null,
         error: null,
     };
 
@@ -29,34 +34,38 @@ function app() {
         feedback: document.querySelector('.feedback'),
         postSection: document.querySelector('.posts'),
         feedSection: document.querySelector('.feeds'),
+        modal: document.querySelector('#modal'),
     }
 
     const state = stateView(initialState, elements);
 
     const getData = (url) => {
         const allOrigins = 'https://allorigins.hexlet.app/get?disableCache=true&url='
-        return axios.get(`${allOrigins}${encodeURIComponent(url)}`);
+        return axios
+            .get(`${allOrigins}${encodeURIComponent(url)}`)
+            .catch((e) => {
+                throw new Error(local.t('networks.error'));
+            });
     }
 
     const autoUpdaterRss = () => {
-        const promises = state.rssList.map((rss) => {
-            return getData(rss)
+        const promises = state.feeds.map((feedState) => {
+            const feedId = feedState.id;
+            return getData(feedState.feed.getRssLink())
                 .then((responseData) => {
-                    if (!responseData.data) return Promise.resolve();
                     const feed = rssParsers(responseData.data.contents);
-                    const updatedPosts = feed.getPosts();
-                    let filteredPosts;
-                    if (state.posts.length > 0) {
-                        const oldUrls = state.posts.map((oldPost) => oldPost.getUrl());
-                        filteredPosts = updatedPosts.filter((post) => !oldUrls.includes(post.getUrl()));
-                    } else {
-                        filteredPosts = newPosts;
-                    }
-                    if (filteredPosts.length > 0) {
-                        state.posts = state.posts.concat(filteredPosts);
-                    }
+                    const existsUrls = state.posts
+                        .filter((item) => item.feedId === feedId)
+                        .map((item) => item.post.getUrl())
+                    const newPosts = feed
+                        .getPosts()
+                        .filter((post) => !existsUrls.includes(post.getUrl()))
+                        .map((newPost) => ({ id: _.uniqueId('post_'), post: newPost, feedId: feedId }))
+                    if (!newPosts) return Promise.resolve();
+                    state.posts = state.posts.concat(newPosts);
                     return Promise.resolve();
-                });
+                })
+                .catch((e) => Promise.resolve())
         });
 
         Promise.all(promises)
@@ -84,9 +93,11 @@ function app() {
             })
             .then((responseData) => {
                 const feed = rssParsers(responseData.data.contents);
+                feed.setRssLink(savedUrl);
                 state.rssList.push(savedUrl);
-                state.feeds.push(feed.getFeedInfo())
-                state.posts = state.posts.concat(feed.getPosts())
+                const feedState = { id: _.uniqueId('feed_'),  feed };
+                state.feeds.push(feedState);
+                state.posts = state.posts.concat(feed.getPosts().map((post) => ({ id: _.uniqueId('post_'), post: post, feedId: feedState.id })));
                 state.mainForm.valid = true;
                 state.subscribeProcess.status = 'added';
                 return Promise.resolve();
@@ -99,6 +110,11 @@ function app() {
                 state.mainForm.valid = false;
                 state.mainForm.error = error;
             });
+    });
+
+    elements.postSection.addEventListener('click', (e) => {
+        state.clickOnPost = e.target.dataset.id;
+        state.readedPostsId.add(e.target.dataset.id);
     });
 
     autoUpdaterRss();

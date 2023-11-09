@@ -1,8 +1,9 @@
 export default class Feed {
-    constructor(title = '', description = '', posts = []) {
+    constructor(title = '', description = '', posts = [], rssLink = '') {
         this.title = title;
         this.description = description;
         this.posts = posts;
+        this.rssLink = rssLink;
     }
 
     setTitle(title) {
@@ -11,6 +12,10 @@ export default class Feed {
 
     setDescription(description) {
         this.description = description;
+    }
+
+    setRssLink(link) {
+        this.rssLink = link;
     }
 
     replacePosts(posts) {
@@ -26,5 +31,9 @@ export default class Feed {
 
     getPosts() {
         return this.posts;
+    }
+
+    getRssLink() {
+        return this.rssLink;
     }
 }

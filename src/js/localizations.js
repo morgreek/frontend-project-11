@@ -15,6 +15,11 @@ i18next.init({
             existingUrl: 'RSS уже существует',
             notValidRSS: 'Ресурс не содержит валидный RSS',
         },
+        form: {
+          preview: 'Просмотр',
+          read: 'Читать полностью',
+          close: 'Закрыть',
+        },
         networks: {
             error: 'Ошибка сети',
         },

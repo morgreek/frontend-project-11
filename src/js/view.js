@@ -1,4 +1,5 @@
 import onChange from 'on-change';
+import local from './localizations.js';
 
 const createContainer = (root, title) => {
     const container = document.createElement('div');
@@ -25,18 +26,50 @@ const createFeedItem = (feed) => {
     return feedItem;
 }
 
-const createPostItem = (post) => {
+const createPostItem = (post, postId, state) => {
     const postItem = document.createElement('li');
     postItem.setAttribute('class', 'list-group-item d-flex justify-content-between align-items-start border-0 border-end-0');
+
     const postUrl = document.createElement('a');
     postUrl.setAttribute('href', `${post.getUrl()}`);
+    postUrl.setAttribute('data-id', `${postId}`);
     postUrl.setAttribute('target', '_blank');
     postUrl.setAttribute('rel', 'noopener noreferrer');
-    postUrl.setAttribute('class', 'fw-bold');
+    postUrl.setAttribute('class', state.readedPostsId.has(postId) ? 'fw-normal' : 'fw-bold');
+    
     postUrl.textContent = post.getTitle();
     postItem.append(postUrl);
+
+    const readButton = document.createElement('button');
+    readButton.setAttribute('type', 'button');
+    readButton.setAttribute('class', 'btn btn-outline-primary btn-sm');
+    readButton.setAttribute('data-id', `${postId}`);
+    readButton.setAttribute('data-bs-toggle', 'modal');
+    readButton.setAttribute('data-bs-target', '#modal');
+    readButton.textContent = local.t('form.preview');
+    postItem.append(readButton);
+
     return postItem;
 }
+
+const handleReadButton = (state, elements, i18n) => {
+    const { modal } = elements;
+    const title = modal.querySelector('.modal-title');
+    const description = modal.querySelector('.modal-body');
+    const linkButton = modal.querySelector('.full-article');
+    const closeButton = modal.querySelector('.btn-secondary');
+
+    const selectedPost = state.posts.find((post) => post.id === state.clickOnPost);
+    title.textContent = selectedPost.post.getTitle();
+    description.textContent = selectedPost.post.getDescription();
+    linkButton.setAttribute('href', `${selectedPost.post.getUrl()}`);
+    linkButton.textContent = local.t('form.read');
+    closeButton.textContent = local.t('form.close');
+    const postElement = document.querySelector(`[data-id="${selectedPost.id}"]`);
+    postElement.classList.remove('fw-bold');
+    postElement.classList.add('fw-normal');
+};
+  
 
 const changeFeedback = (element, text, styleName) => {
     const removedClass = styleName === 'success' ? 'text-danger' : 'text-success';
@@ -99,7 +132,7 @@ const render = (elements, initialState) => (path, value, previousValue) => {
         case 'feeds':
             elements.feedSection.replaceChildren();
             const feedCont = createContainer(elements.feedSection, 'Фиды');
-            initialState.feeds.forEach((feed) => {
+            initialState.feeds.forEach(({ feed }) => {
                 const feedSet = createFeedItem(feed);
                 feedCont.append(feedSet);
             });
@@ -108,10 +141,14 @@ const render = (elements, initialState) => (path, value, previousValue) => {
         case 'posts':
             elements.postSection.replaceChildren();
             const postCont = createContainer(elements.postSection, 'Посты');
-            initialState.posts.forEach((post) => {
-                const postSet = createPostItem(post);
+            initialState.posts.forEach(({ post, id: postId }) => {
+                const postSet = createPostItem(post, postId, initialState);
                 postCont.append(postSet);
             })
+            break;
+// 
+        case 'clickOnPost':
+            handleReadButton(initialState, elements);
             break;
         default:
             break;
