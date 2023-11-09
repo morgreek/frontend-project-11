@@ -81,7 +81,7 @@ const changeFeedback = (element, text, styleName) => {
 const handleSubcribeState = (elements, subscribeState) => {
   switch (subscribeState) {
     case 'added':
-      changeFeedback(elements.feedback, 'RSS успешно добавлен', 'success');
+      changeFeedback(elements.feedback, local.t('rssEvents.success'), 'success');
       break;
 
     case 'sending':
