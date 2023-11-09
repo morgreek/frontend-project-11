@@ -52,7 +52,7 @@ const createPostItem = (post, postId, state) => {
   return postItem;
 };
 
-const handleReadButton = (state, elements, i18n) => {
+const handleReadButton = (state, elements) => {
   const { modal } = elements;
   const title = modal.querySelector('.modal-title');
   const description = modal.querySelector('.modal-body');
