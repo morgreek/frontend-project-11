@@ -103,7 +103,7 @@ const handleSubcribeState = (elements, subscribeState) => {
   }
 };
 
-const render = (elements, initialState) => (path, value, previousValue) => {
+const render = (elements, initialState) => (path, value) => {
   switch (path) {
     case 'subscribeProcess.status':
       handleSubcribeState(elements, value);
@@ -130,7 +130,7 @@ const render = (elements, initialState) => (path, value, previousValue) => {
 
     case 'feeds':
       elements.feedSection.replaceChildren();
-      const feedCont = createContainer(elements.feedSection, 'Фиды');
+      const feedCont = createContainer(elements.feedSection, local.t('form.feeds'));
       initialState.feeds.forEach(({ feed }) => {
         const feedSet = createFeedItem(feed);
         feedCont.append(feedSet);
@@ -139,7 +139,7 @@ const render = (elements, initialState) => (path, value, previousValue) => {
 
     case 'posts':
       elements.postSection.replaceChildren();
-      const postCont = createContainer(elements.postSection, 'Посты');
+      const postCont = createContainer(elements.postSection, local.t('form.posts'));
       initialState.posts.forEach(({ post, id: postId }) => {
         const postSet = createPostItem(post, postId, initialState);
         postCont.append(postSet);

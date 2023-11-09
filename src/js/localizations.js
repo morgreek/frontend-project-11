@@ -16,6 +16,8 @@ i18next.init({
           notValidRSS: 'Ресурс не содержит валидный RSS',
         },
         form: {
+          feeds: 'Фиды',
+          posts: 'Посты',
           preview: 'Просмотр',
           read: 'Читать полностью',
           close: 'Закрыть',

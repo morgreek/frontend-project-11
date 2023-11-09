@@ -43,7 +43,7 @@ function app() {
     const allOrigins = 'https://allorigins.hexlet.app/get?disableCache=true&url=';
     return axios
       .get(`${allOrigins}${encodeURIComponent(url)}`)
-      .catch((e) => {
+      .catch(() => {
         throw new Error(local.t('networks.error'));
       });
   };
@@ -65,7 +65,7 @@ function app() {
           state.posts = state.posts.concat(newPosts);
           return Promise.resolve();
         })
-        .catch((e) => Promise.resolve());
+        .catch(() => Promise.resolve());
     });
 
     Promise.all(promises)
