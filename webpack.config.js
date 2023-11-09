@@ -6,51 +6,49 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const isProduction = process.env.NODE_ENV == 'production';
 
 const config = {
-    mode: process.env.NODE_ENV || 'development',
-    entry: './src/index.js',
-    output: {
-        path: path.resolve(__dirname, 'dist'),
-    },
-    devServer: {
-        open: true,
-        host: 'localhost',
-        liveReload: true,
-        hot: true,
-    },
-    plugins: [
-        new HtmlWebpackPlugin({
-            template: 'template.html',
-        }),
+  mode: process.env.NODE_ENV || 'development',
+  entry: './src/index.js',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+  },
+  devServer: {
+    open: true,
+    host: 'localhost',
+    liveReload: true,
+    hot: true,
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: 'template.html',
+    }),
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env'],
+          },
+        },
+      },
+      { test: /\.css$/, use: ['style-loader', 'css-loader', 'postcss-loader'] },
+      {
+        test: /\.scss$/,
+        use: ['style-loader', 'css-loader', 'sass-loader', 'postcss-loader'],
+      },
+      {
+        test: /\.(ttf|eot|svg)(\?[\s\S]+)?$/,
+        use: 'file-loader',
+      },
+      {
+        test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
+        type: 'asset',
+      },
     ],
-    module: {
-        rules: [
-            {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                        presets: ['@babel/preset-env'],
-                    },
-                },
-            },
-            { test: /\.css$/, use: ['style-loader', 'css-loader', 'postcss-loader'] },
-            {
-                test: /\.scss$/,
-                use: ['style-loader', 'css-loader', 'sass-loader', 'postcss-loader'],
-            },
-            {
-                test: /\.(ttf|eot|svg)(\?[\s\S]+)?$/,
-                use: 'file-loader',
-            },
-            {
-                test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
-                type: 'asset',
-            },
-        ],
-    },
+  },
 };
 
-module.exports = () => {
-    return config;
-};
+module.exports = () => config;

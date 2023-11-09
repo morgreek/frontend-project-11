@@ -7,13 +7,13 @@ i18next.init({
     ru: {
       translation: {
         validate: {
-            reqiured: 'Не должно быть пустым',
-            url: 'Ссылка должна быть валидным URL',
+          reqiured: 'Не должно быть пустым',
+          url: 'Ссылка должна быть валидным URL',
         },
         rssEvents: {
-            success: 'RSS успешно загружен',
-            existingUrl: 'RSS уже существует',
-            notValidRSS: 'Ресурс не содержит валидный RSS',
+          success: 'RSS успешно загружен',
+          existingUrl: 'RSS уже существует',
+          notValidRSS: 'Ресурс не содержит валидный RSS',
         },
         form: {
           preview: 'Просмотр',
@@ -21,7 +21,7 @@ i18next.init({
           close: 'Закрыть',
         },
         networks: {
-            error: 'Ошибка сети',
+          error: 'Ошибка сети',
         },
       },
     },
