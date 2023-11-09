@@ -103,6 +103,24 @@ const handleSubcribeState = (elements, subscribeState) => {
   }
 };
 
+const renderFeeds = (elements, initialState) => {
+  elements.feedSection.replaceChildren();
+  const feedCont = createContainer(elements.feedSection, local.t('form.feeds'));
+  initialState.feeds.forEach(({ feed }) => {
+    const feedSet = createFeedItem(feed);
+    feedCont.append(feedSet);
+  });
+};
+
+const renderPosts = (elements, initialState) => {
+  elements.postSection.replaceChildren();
+  const postCont = createContainer(elements.postSection, local.t('form.posts'));
+  initialState.posts.forEach(({ post, id: postId }) => {
+    const postSet = createPostItem(post, postId, initialState);
+    postCont.append(postSet);
+  });
+};
+
 const render = (elements, initialState) => (path, value) => {
   switch (path) {
     case 'subscribeProcess.status':
@@ -129,23 +147,13 @@ const render = (elements, initialState) => (path, value) => {
       break;
 
     case 'feeds':
-      elements.feedSection.replaceChildren();
-      const feedCont = createContainer(elements.feedSection, local.t('form.feeds'));
-      initialState.feeds.forEach(({ feed }) => {
-        const feedSet = createFeedItem(feed);
-        feedCont.append(feedSet);
-      });
+      renderFeeds(elements, initialState);
       break;
 
     case 'posts':
-      elements.postSection.replaceChildren();
-      const postCont = createContainer(elements.postSection, local.t('form.posts'));
-      initialState.posts.forEach(({ post, id: postId }) => {
-        const postSet = createPostItem(post, postId, initialState);
-        postCont.append(postSet);
-      });
+      renderPosts(elements, initialState);
       break;
-      //
+
     case 'clickOnPost':
       handleReadButton(initialState, elements);
       break;
