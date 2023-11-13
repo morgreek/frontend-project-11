@@ -1,11 +1,10 @@
 {
   "name": "@hexlet/code",
   "version": "1.0.0",
-  "description": "My webpack project",
+  "description": "RSS aggregator - third Hexlet project",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack --mode development",
-    "test": "echo \"package.json - установи тестер\" && exit 1"
+    "dev": "webpack --mode development"
   },
   "author": "morgreek",
   "license": "ISC",
@@ -19,12 +18,8 @@
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-babel": "^5.3.1",
     "eslint-plugin-import": "^2.28.1",
-    "eslint-plugin-jest": "^27.4.3",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.5.3",
-    "jest": "^29.7.0",
-    "jest-cli": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0",
     "postcss-loader": "^7.3.3",
     "sass": "^1.69.5",
     "sass-loader": "^13.3.2",
