@@ -12,7 +12,7 @@ function app() {
       status: 'filling',
       error: null,
     },
-    mainForm: {
+    form: {
       valid: true,
       error: null,
       fields: {
@@ -27,7 +27,7 @@ function app() {
   };
 
   const elements = {
-    mainForm: document.querySelector('form'),
+    form: document.querySelector('form'),
     inputField: document.querySelector('#url-input'),
     submitButton: document.querySelector('button[type="submit"'),
     feedback: document.querySelector('.feedback'),
@@ -73,19 +73,19 @@ function app() {
 
   elements.inputField.addEventListener('input', (e) => {
     const { value: content } = e.target;
-    state.mainForm.fields.url = content;
+    state.form.fields.url = content;
   });
 
-  elements.mainForm.addEventListener('submit', (e) => {
+  elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    state.mainForm.error = null;
+    state.form.error = null;
     state.subscribeProcess.error = null;
     state.subscribeProcess.status = 'sending';
 
     let savedUrl;
     const rssList = state.feeds.map((feedItem) => feedItem.feed.getRssLink());
-    validator(state.mainForm.fields.url, rssList)
+    validator(state.form.fields.url, rssList)
       .then((validatedUrl) => {
         savedUrl = validatedUrl.rssUrl;
         state.subscribeProcess.status = 'sending';
@@ -97,7 +97,7 @@ function app() {
         const feedState = { id: _.uniqueId('feed_'), feed };
         state.feeds.push(feedState);
         state.posts = state.posts.concat(feed.getPosts().map((post) => ({ id: _.uniqueId('post_'), post, feedId: feedState.id })));
-        state.mainForm.valid = true;
+        state.form.valid = true;
         state.subscribeProcess.status = 'added';
         return Promise.resolve();
       })
@@ -106,8 +106,8 @@ function app() {
       })
       .catch((error) => {
         state.subscribeProcess.status = 'error';
-        state.mainForm.valid = false;
-        state.mainForm.error = error;
+        state.form.valid = false;
+        state.form.error = error;
       });
   });
 

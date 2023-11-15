@@ -130,7 +130,7 @@ const render = (elements, initialState) => (path, value) => {
     case 'subscribeProcess.error':
       break;
 
-    case 'mainForm.valid':
+    case 'form.valid':
       if (value) {
         elements.inputField.classList.remove('is-invalid');
       } else {
@@ -138,9 +138,9 @@ const render = (elements, initialState) => (path, value) => {
       }
       break;
 
-    case 'mainForm.error':
-      if (initialState.mainForm.error) {
-        changeFeedback(elements.feedback, initialState.mainForm.error.message, 'danger');
+    case 'form.error':
+      if (initialState.form.error) {
+        changeFeedback(elements.feedback, initialState.form.error.message, 'danger');
       } else {
         changeFeedback(elements.feedback, '', 'success');
       }
