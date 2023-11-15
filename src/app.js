@@ -22,7 +22,7 @@ function app() {
     feeds: [],
     posts: [],
     readedPostsId: new Set(),
-    clickOnPost: null,
+    selectedPost: null,
     error: null,
   };
 
@@ -112,7 +112,7 @@ function app() {
   });
 
   elements.postSection.addEventListener('click', (e) => {
-    state.clickOnPost = e.target.dataset.id;
+    state.selectedPost = e.target.dataset.id;
     state.readedPostsId.add(e.target.dataset.id);
   });
 

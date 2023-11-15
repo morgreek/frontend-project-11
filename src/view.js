@@ -59,7 +59,7 @@ const handleReadButton = (state, elements) => {
   const linkButton = modal.querySelector('.full-article');
   const closeButton = modal.querySelector('.btn-secondary');
 
-  const selectedPost = state.posts.find((post) => post.id === state.clickOnPost);
+  const selectedPost = state.posts.find((post) => post.id === state.selectedPost);
   title.textContent = selectedPost.post.getTitle();
   description.textContent = selectedPost.post.getDescription();
   linkButton.setAttribute('href', `${selectedPost.post.getUrl()}`);
@@ -154,11 +154,11 @@ const render = (elements, initialState) => (path, value) => {
       renderPosts(elements, initialState);
       break;
 
-    case 'clickOnPost':
+    case 'selectedPost':
       handleReadButton(initialState, elements);
       break;
     default:
-      break;
+      break;``
   }
 };
 
