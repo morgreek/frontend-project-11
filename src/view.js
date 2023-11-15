@@ -71,31 +71,33 @@ const handleReadButton = (state, elements) => {
 };
 
 const changeFeedback = (element, text, styleName) => {
+  const el = element;
   const removedClass = styleName === 'success' ? 'text-danger' : 'text-success';
   const addedClass = removedClass === 'text-danger' ? 'text-success' : 'text-danger';
-  element.innerHTML = text;
-  element.classList.remove(removedClass);
-  element.classList.add(addedClass);
+  el.innerHTML = text;
+  el.classList.remove(removedClass);
+  el.classList.add(addedClass);
 };
 
 const handleSubcribeState = (elements, subscribeState) => {
+  const domElements = elements;
   switch (subscribeState) {
     case 'added':
-      changeFeedback(elements.feedback, local.t('rssEvents.success'), 'success');
+      changeFeedback(domElements.feedback, local.t('rssEvents.success'), 'success');
       break;
 
     case 'sending':
-      elements.submitButton.disabled = true;
+      domElements.submitButton.disabled = true;
       break;
 
     case 'filling':
-      elements.inputField.value = '';
-      elements.inputField.focus();
-      elements.submitButton.disabled = false;
+      domElements.inputField.value = '';
+      domElements.inputField.focus();
+      domElements.submitButton.disabled = false;
       break;
 
     case 'error':
-      elements.submitButton.disabled = false;
+      domElements.submitButton.disabled = false;
       break;
 
     default:
@@ -157,8 +159,9 @@ const render = (elements, initialState) => (path, value) => {
     case 'selectedPost':
       handleReadButton(initialState, elements);
       break;
+
     default:
-      break;``
+      break;
   }
 };
 
