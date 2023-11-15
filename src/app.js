@@ -71,11 +71,6 @@ function app() {
       .then(setTimeout(() => autoUpdaterRss(), 5000));
   };
 
-  elements.inputField.addEventListener('input', (e) => {
-    const { value: content } = e.target;
-    state.form.fields.url = content;
-  });
-
   elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
 
@@ -85,7 +80,7 @@ function app() {
 
     let savedUrl;
     const rssList = state.feeds.map((feedItem) => feedItem.feed.getRssLink());
-    validator(state.form.fields.url, rssList)
+    validator(elements.inputField.value, rssList)
       .then((validatedUrl) => {
         savedUrl = validatedUrl.rssUrl;
         state.subscribeProcess.status = 'sending';
