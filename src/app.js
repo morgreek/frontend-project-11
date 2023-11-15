@@ -19,7 +19,6 @@ function app() {
         url: '',
       },
     },
-    rssList: [],
     feeds: [],
     posts: [],
     readedPostsId: new Set(),
@@ -85,7 +84,8 @@ function app() {
     state.subscribeProcess.status = 'sending';
 
     let savedUrl;
-    validator(state.mainForm.fields.url, state.rssList)
+    const rssList = state.feeds.map((feedItem) => feedItem.feed.getRssLink());
+    validator(state.mainForm.fields.url, rssList)
       .then((validatedUrl) => {
         savedUrl = validatedUrl.rssUrl;
         state.subscribeProcess.status = 'sending';
@@ -94,7 +94,6 @@ function app() {
       .then((responseData) => {
         const feed = rssParsers(responseData.data.contents);
         feed.setRssLink(savedUrl);
-        state.rssList.push(savedUrl);
         const feedState = { id: _.uniqueId('feed_'), feed };
         state.feeds.push(feedState);
         state.posts = state.posts.concat(feed.getPosts().map((post) => ({ id: _.uniqueId('post_'), post, feedId: feedState.id })));
