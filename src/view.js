@@ -108,19 +108,15 @@ const handleSubcribeState = (elements, subscribeState) => {
 const renderFeeds = (elements, initialState) => {
   elements.feedSection.replaceChildren();
   const feedCont = createContainer(elements.feedSection, local.t('form.feeds'));
-  initialState.feeds.forEach(({ feed }) => {
-    const feedSet = createFeedItem(feed);
-    feedCont.append(feedSet);
-  });
+  const feedsForAppend = initialState.feeds.map(({ feed }) => createFeedItem(feed));
+  feedCont.append(...feedsForAppend);
 };
 
 const renderPosts = (elements, initialState) => {
   elements.postSection.replaceChildren();
   const postCont = createContainer(elements.postSection, local.t('form.posts'));
-  initialState.posts.forEach(({ post, id: postId }) => {
-    const postSet = createPostItem(post, postId, initialState);
-    postCont.append(postSet);
-  });
+  const postsForAppend = initialState.posts.map(({ post, id: postId }) => createPostItem(post, postId, initialState));
+  postCont.append(...postsForAppend);
 };
 
 const render = (elements, initialState) => (path, value) => {
