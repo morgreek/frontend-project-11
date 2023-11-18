@@ -61,7 +61,7 @@ function app() {
             .filter((post) => !existsUrls.includes(post.getUrl()))
             .map((newPost) => ({ id: _.uniqueId('post_'), post: newPost, feedId }));
           if (!newPosts) return Promise.resolve();
-          state.posts = state.posts.concat(newPosts);
+          state.posts = [...newPosts, ...state.posts];
           return Promise.resolve();
         })
         .catch(() => Promise.resolve());
@@ -91,7 +91,8 @@ function app() {
         feed.setRssLink(savedUrl);
         const feedState = { id: _.uniqueId('feed_'), feed };
         state.feeds.push(feedState);
-        state.posts = state.posts.concat(feed.getPosts().map((post) => ({ id: _.uniqueId('post_'), post, feedId: feedState.id })));
+        const newPosts = feed.getPosts().map((post) => ({ id: _.uniqueId('post_'), post, feedId: feedState.id }))
+        state.posts = [...newPosts, ...state.posts];
         state.form.valid = true;
         state.subscribeProcess.status = 'added';
         return Promise.resolve();
