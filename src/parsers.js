@@ -5,7 +5,10 @@ export default (xmlData) => {
   const parsedData = domParser.parseFromString(xmlData, 'application/xml');
 
   if (parsedData.querySelector('parsererror')) {
-    throw new Error(local.t('rssEvents.notValidRSS'));
+    const error = new Error(local.t('rssEvents.notValidRSS'));
+    error.details = `parsererror: ${parsedData.querySelector('parsererror').textContent}`;
+
+    throw error;
   }
 
   const feedTitle = parsedData.querySelector('title').textContent;
