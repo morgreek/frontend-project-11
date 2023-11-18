@@ -91,7 +91,7 @@ function app() {
         feed.setRssLink(savedUrl);
         const feedState = { id: _.uniqueId('feed_'), feed };
         state.feeds.push(feedState);
-        const newPosts = feed.getPosts().map((post) => ({ id: _.uniqueId('post_'), post, feedId: feedState.id }))
+        const newPosts = feed.getPosts().map((post) => ({ id: _.uniqueId('post_'), post, feedId: feedState.id }));
         state.posts = [...newPosts, ...state.posts];
         state.form.valid = true;
         state.subscribeProcess.status = 'added';
