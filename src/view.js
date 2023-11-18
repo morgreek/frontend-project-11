@@ -1,28 +1,39 @@
 import onChange from 'on-change';
 import local from './localizations.js';
 
-const createContainer = (root, title) => {
+const createListContainer = (title) => {
   const container = document.createElement('div');
   container.setAttribute('class', 'card border-0');
   container.innerHTML = `<div class="card-body"><h2 class="card-title h4">${title}</h2></div>`;
-  const ulItem = document.createElement('ul');
-  ulItem.setAttribute('class', 'list-group border-0 rounded-0');
-  container.append(ulItem);
-  root.append(container);
-  return ulItem;
-};
+  return container;
+}
+
+const createULElement = () => {
+  const ul = document.createElement('ul');
+  ul.setAttribute('class', 'list-group border-0 rounded-0');
+  return ul;
+}
+
+const createLIElement = (classes) => {
+  const li = document.createElement('li');
+  if (classes) {
+    li.setAttribute('class', classes);
+  }
+  return li;
+}
 
 const createFeedItem = (feed) => {
-  const feedItem = document.createElement('li');
-  feedItem.setAttribute('class', 'list-group-item border-0 border-end-0');
+  const feedItem = createLIElement('list-group-item border-0 border-end-0');
+
   const feedHeader = document.createElement('h3');
   feedHeader.textContent = feed.title;
   feedHeader.setAttribute('class', 'h6 m-0');
-  feedItem.append(feedHeader);
+
   const feedBody = document.createElement('p');
   feedBody.textContent = feed.description;
   feedBody.setAttribute('class', 'm-0 small text-black-50');
-  feedItem.append(feedBody);
+
+  feedItem.append(feedHeader, feedBody);
   return feedItem;
 };
 
@@ -36,9 +47,7 @@ const createPostItem = (post, postId, state) => {
   postUrl.setAttribute('target', '_blank');
   postUrl.setAttribute('rel', 'noopener noreferrer');
   postUrl.setAttribute('class', state.readedPostsId.has(postId) ? 'fw-normal' : 'fw-bold');
-
   postUrl.textContent = post.getTitle();
-  postItem.append(postUrl);
 
   const readButton = document.createElement('button');
   readButton.setAttribute('type', 'button');
@@ -47,7 +56,7 @@ const createPostItem = (post, postId, state) => {
   readButton.setAttribute('data-bs-toggle', 'modal');
   readButton.setAttribute('data-bs-target', '#modal');
   readButton.textContent = local.t('form.preview');
-  postItem.append(readButton);
+  postItem.append(postUrl, readButton);
 
   return postItem;
 };
@@ -66,8 +75,7 @@ const handleReadButton = (state, elements) => {
   linkButton.textContent = local.t('form.read');
   closeButton.textContent = local.t('form.close');
   const postElement = document.querySelector(`[data-id="${selectedPost.id}"]`);
-  postElement.classList.remove('fw-bold');
-  postElement.classList.add('fw-normal');
+  postElement.classList.replace('fw-bold', 'fw-normal');
 };
 
 const changeFeedback = (element, text, styleName) => {
@@ -75,8 +83,7 @@ const changeFeedback = (element, text, styleName) => {
   const removedClass = styleName === 'success' ? 'text-danger' : 'text-success';
   const addedClass = removedClass === 'text-danger' ? 'text-success' : 'text-danger';
   el.innerHTML = text;
-  el.classList.remove(removedClass);
-  el.classList.add(addedClass);
+  el.classList.replace(removedClass, addedClass);
 };
 
 const handleSubcribeState = (elements, subscribeState) => {
@@ -105,19 +112,27 @@ const handleSubcribeState = (elements, subscribeState) => {
   }
 };
 
-const renderFeeds = (elements, initialState) => {
-  elements.feedSection.replaceChildren();
-  const feedCont = createContainer(elements.feedSection, local.t('form.feeds'));
-  const feedsForAppend = initialState.feeds.map(({ feed }) => createFeedItem(feed));
-  feedCont.append(...feedsForAppend);
-};
+const createFeedItems = ({ feed }) => createFeedItem(feed);
+function createPostItems ({ post, id: postId }) {
+  return createPostItem(post, postId, this);
+}
 
-const renderPosts = (elements, initialState) => {
-  elements.postSection.replaceChildren();
-  const postCont = createContainer(elements.postSection, local.t('form.posts'));
-  const postsForAppend = initialState.posts.map(({ post, id: postId }) => createPostItem(post, postId, initialState));
-  postCont.append(...postsForAppend);
-};
+const createListWithItems = (listName, stateList, createItems, state = undefined) => {
+  const container = createListContainer(listName);
+  const list = createULElement();
+  const items = stateList.map(createItems, state);
+
+  list.append(...items);
+  container.append(list);
+
+  return container;
+}
+
+const renderList = (root, { state, listName, list, mapFn }) => {
+  root.replaceChildren();
+  const newChildren = createListWithItems(listName, list, mapFn, state);
+  root.append(newChildren);
+}
 
 const render = (elements, initialState) => (path, value) => {
   switch (path) {
@@ -145,11 +160,26 @@ const render = (elements, initialState) => (path, value) => {
       break;
 
     case 'feeds':
-      renderFeeds(elements, initialState);
+      renderList(
+        elements.feedSection,
+        {
+          listName: local.t('form.feeds'),
+          list: initialState.feeds, 
+          mapFn: createFeedItems,
+        }
+      );
       break;
 
     case 'posts':
-      renderPosts(elements, initialState);
+      renderList(
+        elements.postSection,
+        {
+          listName: local.t('form.posts'),
+          list: initialState.posts,
+          mapFn: createPostItems,
+          state: initialState,
+        }
+      )
       break;
 
     case 'selectedPost':
