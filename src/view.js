@@ -6,13 +6,13 @@ const createListContainer = (title) => {
   container.setAttribute('class', 'card border-0');
   container.innerHTML = `<div class="card-body"><h2 class="card-title h4">${title}</h2></div>`;
   return container;
-}
+};
 
 const createULElement = () => {
   const ul = document.createElement('ul');
   ul.setAttribute('class', 'list-group border-0 rounded-0');
   return ul;
-}
+};
 
 const createLIElement = (classes) => {
   const li = document.createElement('li');
@@ -20,7 +20,7 @@ const createLIElement = (classes) => {
     li.setAttribute('class', classes);
   }
   return li;
-}
+};
 
 const createFeedItem = (feed) => {
   const feedItem = createLIElement('list-group-item border-0 border-end-0');
@@ -113,7 +113,7 @@ const handleSubcribeState = (elements, subscribeState) => {
 };
 
 const createFeedItems = ({ feed }) => createFeedItem(feed);
-function createPostItems ({ post, id: postId }) {
+function createPostItems({ post, id: postId }) {
   return createPostItem(post, postId, this);
 }
 
@@ -126,13 +126,15 @@ const createListWithItems = (listName, stateList, createItems, state = undefined
   container.append(list);
 
   return container;
-}
+};
 
-const renderList = (root, { state, listName, list, mapFn }) => {
+const renderList = (root, {
+  state, listName, list, mapFn,
+}) => {
   root.replaceChildren();
   const newChildren = createListWithItems(listName, list, mapFn, state);
   root.append(newChildren);
-}
+};
 
 const render = (elements, initialState) => (path, value) => {
   switch (path) {
@@ -164,9 +166,9 @@ const render = (elements, initialState) => (path, value) => {
         elements.feedSection,
         {
           listName: local.t('form.feeds'),
-          list: initialState.feeds, 
+          list: initialState.feeds,
           mapFn: createFeedItems,
-        }
+        },
       );
       break;
 
@@ -178,8 +180,8 @@ const render = (elements, initialState) => (path, value) => {
           list: initialState.posts,
           mapFn: createPostItems,
           state: initialState,
-        }
-      )
+        },
+      );
       break;
 
     case 'selectedPost':
