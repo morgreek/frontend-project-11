@@ -13,7 +13,7 @@ const config = {
     open: true,
     host: 'localhost',
     liveReload: true,
-    hot: true,
+    hot: false,
   },
   plugins: [
     new HtmlWebpackPlugin({
