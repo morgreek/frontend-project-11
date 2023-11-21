@@ -5,6 +5,7 @@ import stateView from './view.js';
 import validator from './validator.js';
 import rssParsers from './rssParsers.js';
 import local from './localizations.js';
+import makeProxy from './proxy.js';
 
 function app() {
   const initialState = {
@@ -34,9 +35,9 @@ function app() {
   const state = stateView(initialState, elements);
 
   const getData = (url) => {
-    const allOrigins = 'https://allorigins.hexlet.app/get?disableCache=true&url=';
+    const proxyUrl = makeProxy(url);
     return axios
-      .get(`${allOrigins}${encodeURIComponent(url)}`)
+      .get(`${proxyUrl.toString()}`)
       .catch(() => {
         throw new Error(local.t('networks.error'));
       });
