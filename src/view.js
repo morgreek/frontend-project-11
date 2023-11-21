@@ -92,7 +92,7 @@ const handleSubcribeState = (elements, subscribeState, state) => {
     case 'sending':
       domElements.submitButton.disabled = true;
       break;
-      
+
     case 'filling':
       changeFeedback(domElements.feedback, local.t('rssEvents.success'), 'success');
       domElements.inputField.value = '';
@@ -153,7 +153,7 @@ const render = (elements, initialState) => (path, value) => {
       }
       break;
 
-      case 'feeds':
+    case 'feeds':
       renderList(
         elements.feedSection,
         {
