@@ -9,6 +9,7 @@ import makeProxy from './proxy.js';
 
 function app() {
   const UPDATE_INTERVAL = 5000;
+
   const initialState = {
     subscribeProcess: {
       status: 'filling',
@@ -70,19 +71,15 @@ function app() {
 
   elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
+    const formData = new FormData(e.target);
+    const savedUrl = formData.get('url').trim();
 
     state.form.error = null;
-    state.subscribeProcess.error = null;
     state.subscribeProcess.status = 'sending';
 
-    let savedUrl;
     const rssList = state.feeds.map((feedItem) => feedItem.feed.getRssLink());
     validator(elements.inputField.value, rssList)
-      .then((validatedUrl) => {
-        savedUrl = validatedUrl.rssUrl;
-        state.subscribeProcess.status = 'sending';
-        return getData(savedUrl);
-      })
+      .then(() => getData(savedUrl))
       .then((responseData) => {
         const feed = rssParsers(responseData.data.contents);
         feed.setRssLink(savedUrl);
@@ -91,11 +88,8 @@ function app() {
         const newPosts = feed.getPosts().map((post) => ({ id: _.uniqueId('post_'), post, feedId: feedState.id }));
         state.posts = [...newPosts, ...state.posts];
         state.form.valid = true;
-        state.subscribeProcess.status = 'added';
-        return Promise.resolve();
-      })
-      .then(() => {
         state.subscribeProcess.status = 'filling';
+        return Promise.resolve();
       })
       .catch((error) => {
         state.form.valid = false;
@@ -103,6 +97,7 @@ function app() {
         if (error.details) {
           console.log(error.details);
         }
+        state.subscribeProcess.status = 'error';
       });
   });
 

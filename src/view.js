@@ -86,24 +86,27 @@ const changeFeedback = (element, text, styleName) => {
   el.classList.replace(removedClass, addedClass);
 };
 
-const handleSubcribeState = (elements, subscribeState) => {
+const handleSubcribeState = (elements, subscribeState, state) => {
   const domElements = elements;
   switch (subscribeState) {
-    case 'added':
-      changeFeedback(domElements.feedback, local.t('rssEvents.success'), 'success');
-      break;
-
     case 'sending':
       domElements.submitButton.disabled = true;
       break;
-
+      
     case 'filling':
+      changeFeedback(domElements.feedback, local.t('rssEvents.success'), 'success');
       domElements.inputField.value = '';
       domElements.inputField.focus();
       domElements.submitButton.disabled = false;
       break;
 
     case 'error':
+      if (state.form.error) {
+        changeFeedback(elements.feedback, state.form.error.message, 'danger');
+      } else {
+        changeFeedback(elements.feedback, '', 'success');
+      }
+      domElements.inputField.focus();
       domElements.submitButton.disabled = false;
       break;
 
@@ -139,7 +142,7 @@ const renderList = (root, {
 const render = (elements, initialState) => (path, value) => {
   switch (path) {
     case 'subscribeProcess.status':
-      handleSubcribeState(elements, value);
+      handleSubcribeState(elements, value, initialState);
       break;
 
     case 'form.valid':
@@ -150,15 +153,7 @@ const render = (elements, initialState) => (path, value) => {
       }
       break;
 
-    case 'form.error':
-      if (initialState.form.error) {
-        changeFeedback(elements.feedback, initialState.form.error.message, 'danger');
-      } else {
-        changeFeedback(elements.feedback, '', 'success');
-      }
-      break;
-
-    case 'feeds':
+      case 'feeds':
       renderList(
         elements.feedSection,
         {
