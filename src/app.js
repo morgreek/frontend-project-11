@@ -97,7 +97,6 @@ function app() {
         state.subscribeProcess.status = 'filling';
       })
       .catch((error) => {
-        state.subscribeProcess.status = 'error';
         state.form.valid = false;
         state.form.error = error;
         if (error.details) {
