@@ -142,9 +142,6 @@ const render = (elements, initialState) => (path, value) => {
       handleSubcribeState(elements, value);
       break;
 
-    case 'subscribeProcess.error':
-      break;
-
     case 'form.valid':
       if (value) {
         elements.inputField.classList.remove('is-invalid');

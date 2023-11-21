@@ -10,20 +10,15 @@ function app() {
   const initialState = {
     subscribeProcess: {
       status: 'filling',
-      error: null,
     },
     form: {
       valid: true,
       error: null,
-      fields: {
-        url: '',
-      },
     },
     feeds: [],
     posts: [],
     readedPostsId: new Set(),
     selectedPost: null,
-    error: null,
   };
 
   const elements = {
