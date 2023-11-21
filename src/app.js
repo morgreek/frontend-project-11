@@ -3,7 +3,7 @@ import axios from 'axios';
 import _ from 'lodash';
 import stateView from './view.js';
 import validator from './validator.js';
-import rssParsers from './rssParsers.js';
+import rssParser from './rssParser.js';
 import local from './localizations.js';
 import makeProxy from './proxy.js';
 
@@ -50,7 +50,7 @@ function app() {
       const feedId = feedState.id;
       return getData(feedState.feed.getRssLink())
         .then((responseData) => {
-          const feed = rssParsers(responseData.data.contents);
+          const feed = rssParser(responseData.data.contents);
           const existsUrls = state.posts
             .filter((item) => item.feedId === feedId)
             .map((item) => item.post.getUrl());
@@ -81,7 +81,7 @@ function app() {
     validator(elements.inputField.value, rssList)
       .then(() => getData(savedUrl))
       .then((responseData) => {
-        const feed = rssParsers(responseData.data.contents);
+        const feed = rssParser(responseData.data.contents);
         feed.setRssLink(savedUrl);
         const feedState = { id: _.uniqueId('feed_'), feed };
         state.feeds.push(feedState);

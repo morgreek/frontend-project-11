@@ -1,6 +1,6 @@
 import Feed from './Feed';
 import FeedPost from './FeedPost';
-import xmlParser from './parsers.js';
+import xmlParser from './parser.js';
 
 const parseXML = (xmlData) => {
   const result = new Feed();
