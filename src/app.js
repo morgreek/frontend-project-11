@@ -8,6 +8,7 @@ import local from './localizations.js';
 import makeProxy from './proxy.js';
 
 function app() {
+  const UPDATE_INTERVAL = 5000;
   const initialState = {
     subscribeProcess: {
       status: 'filling',
@@ -64,7 +65,7 @@ function app() {
     });
 
     Promise.all(promises)
-      .then(setTimeout(() => autoUpdaterRss(), 5000));
+      .then(setTimeout(() => autoUpdaterRss(), UPDATE_INTERVAL));
   };
 
   elements.form.addEventListener('submit', (e) => {
